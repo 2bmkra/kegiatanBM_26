@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Kegiatan Bina Marga 2026</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --surface-2:#f9f9f7; --surface-card:#ffffff;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --text-muted:#898781;
+  --gridline:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#6250d6; --s8:#e34948;
+  --seq-250:#86b6ef; --seq-350:#5598e7; --seq-450:#2a78d6; --seq-550:#1c5cab; --seq-650:#104281;
+  --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --success-text:#006300;
+  --shadow: 0 1px 2px rgba(11,11,11,0.06), 0 2px 8px rgba(11,11,11,0.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-1:#1a1a19; --surface-2:#0d0d0d; --surface-card:#232322;
+    --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#898781;
+    --gridline:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --seq-250:#86b6ef; --seq-350:#5598e7; --seq-450:#3987e5; --seq-550:#1c5cab; --seq-650:#184f95;
+    --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+    --success-text:#0ca30c;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --surface-2:#0d0d0d; --surface-card:#232322;
+  --text-primary:#f0efec; --text-secondary:#c3c2b7; --text-muted:#898781;
+  --gridline:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  --seq-250:#86b6ef; --seq-350:#5598e7; --seq-450:#3987e5; --seq-550:#1c5cab; --seq-650:#184f95;
+  --good:#0ca30c; --warning:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --success-text:#0ca30c;
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family: system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--surface-2); color:var(--text-primary);
+}
+.app{max-width:1280px; margin:0 auto; padding:16px;}
+header.top{
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+  padding:14px 18px; background:var(--surface-card); border:1px solid var(--border); border-radius:14px;
+  box-shadow:var(--shadow); margin-bottom:16px;
+}
+header.top h1{font-size:17px; margin:0; font-weight:700;}
+header.top .sub{font-size:12.5px; color:var(--text-secondary); margin-top:2px;}
+.badge-src{display:inline-block; font-size:11px; padding:2px 8px; border-radius:999px; background:var(--surface-2); color:var(--text-secondary); border:1px solid var(--border); margin-left:6px;}
+.topbtns{display:flex; gap:8px; flex-wrap:wrap;}
+button, .btn{
+  font: inherit; font-size:13px; font-weight:600; cursor:pointer;
+  border:1px solid var(--border); background:var(--surface-card); color:var(--text-primary);
+  padding:8px 14px; border-radius:10px; transition:background .12s, border-color .12s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+button:hover, .btn:hover{background:var(--surface-2);}
+button.primary{background:var(--s1); color:#fff; border-color:transparent;}
+button.primary:hover{background:var(--seq-550);}
+button.ghost{background:transparent;}
+button:disabled{opacity:.45; cursor:not-allowed;}
+input[type=file]{display:none;}
+
+nav.tabs{display:flex; gap:6px; margin-bottom:16px; background:var(--surface-card); border:1px solid var(--border); border-radius:12px; padding:4px; width:fit-content;}
+nav.tabs button{border:none; background:transparent; border-radius:9px; padding:8px 16px;}
+nav.tabs button.active{background:var(--s1); color:#fff;}
+
+.view{display:none;}
+.view.active{display:block;}
+
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;}
+@media (max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.kpi-row{grid-template-columns:1fr;}}
+.kpi{background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:16px; box-shadow:var(--shadow);}
+.kpi .label{font-size:12px; color:var(--text-secondary); font-weight:600; text-transform:uppercase; letter-spacing:.03em;}
+.kpi .value{font-size:28px; font-weight:700; margin-top:6px; font-variant-numeric:normal;}
+.kpi .foot{font-size:12px; color:var(--text-muted); margin-top:4px;}
+.kpi .foot b{color:var(--text-secondary);}
+
+.grid2{display:grid; grid-template-columns:1.3fr 1fr; gap:14px; margin-bottom:16px;}
+@media (max-width:980px){.grid2{grid-template-columns:1fr;}}
+.card{background:var(--surface-card); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:var(--shadow);}
+.card h3{margin:0 0 2px; font-size:14.5px; font-weight:700;}
+.card .cardsub{font-size:12px; color:var(--text-muted); margin-bottom:14px;}
+
+
+.hbar-row{display:grid; grid-template-columns:150px 1fr 46px; gap:10px; align-items:center; font-size:12.5px; margin:8px 0;}
+.hbar-row .lbl{color:var(--text-secondary); font-weight:600; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.hbar-track{background:var(--surface-2); border-radius:6px; height:16px; overflow:hidden; position:relative;}
+.hbar-fill{height:100%; border-radius:6px; min-width:3px;}
+.hbar-row .num{font-weight:700; text-align:right; font-variant-numeric: tabular-nums;}
+.legend-row{display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:12px; color:var(--text-secondary);}
+.legend-row .sw{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px;}
+
+table{width:100%; border-collapse:collapse; font-size:13px;}
+thead th{text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.02em; color:var(--text-muted); font-weight:700; padding:8px 10px; border-bottom:1px solid var(--gridline); white-space:nowrap;}
+tbody td{padding:9px 10px; border-bottom:1px solid var(--gridline); vertical-align:top;}
+tbody tr:hover{background:var(--surface-2);}
+.nowrap{white-space:nowrap;}
+.right{text-align:right;}
+.namecell{max-width:280px;}
+.namecell .n{font-weight:600;}
+.namecell .p{font-size:11.5px; color:var(--text-muted);}
+
+.stagebadge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; white-space:nowrap;}
+.filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px;}
+.filters input[type=text], .filters select{
+  font:inherit; font-size:13px; padding:7px 10px; border-radius:9px; border:1px solid var(--border);
+  background:var(--surface-card); color:var(--text-primary); min-width:0;
+}
+.filters input[type=text]{flex:1 1 200px;}
+.filters .count{font-size:12px; color:var(--text-muted); margin-left:auto;}
+
+.table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:12px;}
+@media (max-width:680px){
+  table thead th:nth-child(3), table tbody td:nth-child(3),
+  table thead th:nth-child(4), table tbody td:nth-child(4),
+  table thead th:nth-child(5), table tbody td:nth-child(5){display:none;}
+  .namecell{max-width:180px;}
+}
+
+.modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:50; padding:16px;}
+.modal-backdrop.show{display:flex;}
+.modal{background:var(--surface-card); border-radius:16px; max-width:720px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.35); border:1px solid var(--border);}
+.modal-head{display:flex; justify-content:space-between; align-items:flex-start; padding:18px 22px; border-bottom:1px solid var(--gridline); gap:10px; position:sticky; top:0; background:var(--surface-card); z-index:2;}
+.modal-head h2{margin:0; font-size:16px;}
+.modal-head p{margin:3px 0 0; font-size:12px; color:var(--text-muted);}
+.modal-body{padding:18px 22px;}
+.formgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+@media (max-width:620px){.formgrid{grid-template-columns:1fr;}}
+.field{display:flex; flex-direction:column; gap:4px;}
+.field.span2{grid-column:1/-1;}
+.field label{font-size:11.5px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.02em;}
+.field input, .field select{
+  font:inherit; font-size:13.5px; padding:8px 10px; border-radius:9px; border:1px solid var(--border);
+  background:var(--surface-1); color:var(--text-primary);
+}
+.modal-foot{display:flex; justify-content:space-between; gap:10px; padding:16px 22px; border-top:1px solid var(--gridline); position:sticky; bottom:0; background:var(--surface-card);}
+.section-label{font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.03em; margin:14px 0 8px; grid-column:1/-1; border-top:1px solid var(--gridline); padding-top:12px;}
+.section-label:first-child{border-top:none; margin-top:0; padding-top:0;}
+
+.banner{padding:12px 16px; border-radius:12px; font-size:13px; margin-bottom:16px; display:flex; gap:10px; align-items:flex-start; border:1px solid var(--border);}
+.banner.setup{background:rgba(237,161,0,.10); border-color:rgba(237,161,0,.35);}
+.banner.setup b{display:block; margin-bottom:2px;}
+.banner a.lnk{color:var(--s1); font-weight:700; cursor:pointer; text-decoration:underline;}
+.tiny{font-size:11.5px; color:var(--text-muted);}
+.toast{position:fixed; bottom:20px; right:20px; background:var(--text-primary); color:var(--surface-1); padding:10px 16px; border-radius:10px; font-size:13px; box-shadow:var(--shadow); z-index:80; opacity:0; transform:translateY(8px); transition:all .25s;}
+.toast.show{opacity:1; transform:translateY(0);}
+footer.credit{text-align:center; color:var(--text-muted); font-size:11.5px; margin:28px 0 10px;}
+
+details.setup-help{margin-top:10px;}
+details.setup-help summary{cursor:pointer; font-weight:600; font-size:12.5px;}
+details.setup-help pre{background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:10px; font-size:11px; overflow-x:auto; white-space:pre-wrap;}
+code{background:var(--surface-1); padding:1px 5px; border-radius:5px; font-size:11.5px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div>
+      <h1>Monitoring Kegiatan Bina Marga 2026 <span class="badge-src" id="modeBadge">memuat...</span></h1>
+      <div class="sub">Penetapan &amp; Perubahan &middot; persiapan sampai serah terima</div>
+    </div>
+    <div class="topbtns">
+      <button class="ghost" id="btnExport">&#8681; Download Excel</button>
+      <button class="ghost" id="btnImportTrigger">&#8679; Upload Excel</button>
+      <input type="file" id="fileImport" accept=".xlsx,.xls">
+      <button class="primary" id="btnAdd">+ Kegiatan Baru</button>
+    </div>
+  </header>
+
+  <div id="setupBanner" class="banner setup" style="display:none;">
+    <div style="flex:1;">
+      <b>Firebase belum dikonfigurasi &mdash; data saat ini hanya tersimpan di browser ini (localStorage).</b>
+      Edit tetap bisa dicoba sekarang. Supaya data tersimpan terpusat &amp; bisa diakses tim dari komputer lain, isi <code>firebaseConfig</code> di bagian atas file ini.
+      <details class="setup-help">
+        <summary>Panduan setup Firebase (5 menit)</summary>
+        <pre id="setupGuideText"></pre>
+      </details>
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tabbtn active" data-view="dashboard">Dashboard</button>
+    <button class="tabbtn" data-view="daftar">Daftar Kegiatan</button>
+  </nav>
+
+  <div class="filters">
+    <input type="text" id="fSearch" placeholder="Cari nama kegiatan / penyedia...">
+    <select id="fPenetapan"><option value="">Semua Penetapan/Perubahan</option></select>
+    <select id="fJenis"><option value="">Semua Jenis</option></select>
+    <select id="fSumber"><option value="">Semua Sumber Dana</option></select>
+    <select id="fMetode"><option value="">Semua Metode</option></select>
+    <select id="fStage"><option value="">Semua Tahapan</option></select>
+    <button class="ghost" id="btnResetFilter" style="display:none;">&times; Reset Filter</button>
+    <span class="count" id="rowCount"></span>
+  </div>
+
+  <!-- ===================== DASHBOARD ===================== -->
+  <section class="view active" id="view-dashboard">
+    <div class="tiny" id="dashFilterNote" style="margin:-6px 0 12px;"></div>
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <h3>Tahapan Pelaksanaan &mdash; Persiapan sampai Serah Terima</h3>
+      <div class="cardsub">Jumlah paket di setiap tahapan saat ini</div>
+      <div id="stageChart"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Penetapan vs Perubahan</h3>
+        <div class="cardsub">Jumlah paket dan total pagu</div>
+        <div id="chartPenetapan"></div>
+      </div>
+      <div class="card">
+        <h3>Sumber Dana</h3>
+        <div class="cardsub">Jumlah paket dan total pagu per sumber</div>
+        <div id="chartSumber"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Jenis Pekerjaan</h3>
+        <div class="cardsub">Konstruksi vs Konsultansi (Perencanaan/Pengawasan)</div>
+        <div id="chartJenis"></div>
+      </div>
+      <div class="card">
+        <h3>Metode Pemilihan</h3>
+        <div class="cardsub">Jumlah paket dan total pagu per metode</div>
+        <div id="chartMetode"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DAFTAR KEGIATAN ===================== -->
+  <section class="view" id="view-daftar">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th><th>Nama Kegiatan</th><th>Jenis</th><th>Pen/Peru</th><th>Sumber</th>
+            <th class="right">Pagu</th><th>Tahapan</th><th>Metode</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tblBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="credit">Dibangun untuk Bidang Bina Marga, DPUPR Kabupaten Karanganyar &middot; data per upload terakhir</footer>
+</div>
+
+<!-- ===================== MODAL EDIT/DETAIL ===================== -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="modalTitle">Detail Kegiatan</h2>
+        <p id="modalSub"></p>
+      </div>
+      <button class="ghost" id="btnCloseModal">&times; Tutup</button>
+    </div>
+    <div class="modal-body">
+      <form class="formgrid" id="editForm"></form>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost" id="btnDelete" style="color:var(--critical); border-color:rgba(208,59,59,.4);">Hapus Kegiatan</button>
+      <div style="display:flex; gap:8px;">
+        <button class="ghost" id="btnCancelModal">Batal</button>
+        <button class="primary" id="btnSaveModal">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+/* =========================================================================
+   MONITORING KEGIATAN BINA MARGA 2026
+   - Data awal diambil dari "DAFTAR KEGIATAN Dpupr.xlsx" (122 baris paket)
+   - Simpan ke Firebase Firestore jika firebaseConfig di bawah sudah diisi.
+     Jika kosong, aplikasi berjalan mode lokal (localStorage) agar tetap
+     bisa dicoba tanpa setup apapun.
+   ========================================================================= */
+
+// >>> ISI DI SINI jika sudah punya project Firebase (lihat panduan di banner atas) <<<
+const firebaseConfig = {
+  apiKey: "AIzaSyBEVZTNBnp0dopCWrSwx5vkZE90h2rpaSg",
+  authDomain: "monitoring-bm-2026.firebaseapp.com",
+  projectId: "monitoring-bm-2026",
+  storageBucket: "monitoring-bm-2026.firebasestorage.app",
+  messagingSenderId: "705738805549",
+  appId: "1:705738805549:web:e5583dd56e9e97bae803a4"
+};
+
+const SEED_DATA = [{"id": 1, "no": 1, "nama": "Ruas Jalan Bendungan - Jenggrik (DAK)", "jenis": "Konstruksi", "pagu": 5893000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Karya Usaha Berdikari", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 2, "no": 2, "nama": "Ruas Jalan Colomadu - Banyuanyar (DAK)", "jenis": "Konstruksi", "pagu": 4913000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Pilar Jaya Persada", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 3, "no": 3, "nama": "Ruas Jalan Jatipuro - Klerong (DAK)", "jenis": "Konstruksi", "pagu": 1813000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Zhafran Jaya Konstruksi", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-10", "progresKeuangan": 30, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 4, "no": 4, "nama": "Ruas Jalan Jatiyoso - Beruk (DAK)", "jenis": "Konstruksi", "pagu": 4423000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Anugrah Lima Utama", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-10", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 5, "no": 5, "nama": "Ruas Jalan Jumapolo - Jatipuro (DAK)", "jenis": "Konstruksi", "pagu": 9301000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Putra Kalingga", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 6, "no": 6, "nama": "Ruas Jalan Matesih - Plosorejo (DAK)", "jenis": "Konstruksi", "pagu": 4003000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Cipta Graha", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 7, "no": 7, "nama": "Ruas Jalan MGR. Sugiyopranoto (DAK)", "jenis": "Konstruksi", "pagu": 7613000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Mitra Karya Lima", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-16", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 8, "no": 8, "nama": "Ruas Jalan Sringin - Tunggulrejo (DAK)", "jenis": "Konstruksi", "pagu": 2393000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Mitra Karya Lima", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 9, "no": 9, "nama": "Ruas Jalan Tlobosempon - Matesih (DAK)", "jenis": "Konstruksi", "pagu": 3793000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Mitra Karya Lima", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 10, "no": 10, "nama": "Ruas Jalan Tuban - Jambu (DAK)", "jenis": "Konstruksi", "pagu": 4081000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": "CV. Redjo Pawiro", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-16", "progresKeuangan": 20, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 11, "no": 11, "nama": "Ruas Jalan Bendungan - Jenggrik (DAK)", "jenis": "Konsultansi", "pagu": 70000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "PT. Perencana Jaya Indonesia", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 12, "no": 12, "nama": "Ruas Jalan Colomadu - Banyuanyar (DAK)", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Adhirajasa Consultan", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 13, "no": 13, "nama": "Ruas Jalan Jatipuro - Klerong (DAK)", "jenis": "Konsultansi", "pagu": 40000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Alpha Beta Ozora Consultan", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-10", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 14, "no": 14, "nama": "Ruas Jalan Jatiyoso - Beruk (DAK)", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Bengawan Tjipta Jaya", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-10", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 15, "no": 15, "nama": "Ruas Jalan Jumapolo - Jatipuro (DAK)", "jenis": "Konsultansi", "pagu": 90000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Caraka", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 16, "no": 16, "nama": "Ruas Jalan Matesih - Plosorejo (DAK)", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Bengawan Tjipta Jaya", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-13", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-09", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 17, "no": 17, "nama": "Ruas Jalan MGR. Sugiyopranoto (DAK)", "jenis": "Konsultansi", "pagu": 70000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Reyhan Putra Teknindo", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-16", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 18, "no": 18, "nama": "Ruas Jalan Sringin - Tunggulrejo (DAK)", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Asanka", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 19, "no": 19, "nama": "Ruas Jalan Tlobosempon - Matesih (DAK)", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Guna Daya Perkasa", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-10-17", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 20, "no": 20, "nama": "Ruas Jalan Tuban - Jambu (DAK)", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Duta Teknika", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Juli 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-07-20", "waktuPelaksanaan": 120.0, "tanggalAkhirPelaksanaan": "2026-11-16", "progresKeuangan": null, "sumberDana": "DAK", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 21, "no": 21, "nama": "Pengaspalan Jl. Bok Pitikan, Kel. Lalung, Kec. Karanganyar (Ruas 241)", "jenis": "Konstruksi", "pagu": 200000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Maheswara Adiluhung Buwana", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Agustus 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-08-27", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-11-24", "progresKeuangan": 30, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 22, "no": 22, "nama": "Pemeliharaan Jl. Delingan - Gajahan, Kec. Karanganyar (Ruas 317)", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Anugerah Shankara Rizki", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Maret 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-03-17", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-06-14", "progresKeuangan": 100, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 23, "no": 23, "nama": "Konsultansi Penyusunan DED Kegiatan Tahun 2026", "jenis": "Konsultansi", "pagu": 100000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Graha Citra selaras", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Maret 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-03-17", "waktuPelaksanaan": 90.0, "tanggalAkhirPelaksanaan": "2026-06-14", "progresKeuangan": 100, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 24, "no": 24, "nama": "Pelebaran Jalan Jumapolo - Jumantono (Ruas 185)", "jenis": "Konsultansi", "pagu": 65000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "PT. Perencana Jaya Indonesia", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 25, "no": 25, "nama": "Rehabilitasi Jalan Matesih - Tegalgede (Ruas 141)", "jenis": "Konsultansi", "pagu": 65000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Adhirajasa Consultant", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 26, "no": 26, "nama": "Pelebaran Jalan Gedong - Kebonagung (Ruas 202)", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Reyhan Putra Teknindo", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 27, "no": 27, "nama": "Pelebaran Jalan Kebak - Punthuk (Ruas 183)", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Caraka", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 28, "no": 28, "nama": "Pemeliharaan Berkala Jl. Matesih - Tawangmangu (Ruas 126)", "jenis": "Konsultansi", "pagu": 65000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Reyhan Putra Teknindo", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 29, "no": 29, "nama": "Pemeliharaan Berkala Jl. Baturan Klodran (Ruas 13)", "jenis": "Konsultansi", "pagu": 40000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Duta Teknika", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 30, "no": 30, "nama": "Jasa Konsultansi: Pembangunan Jalan menuju Kebon 9-11, Gumeng", "jenis": "Konsultansi", "pagu": 40000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Caraka", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 31, "no": 31, "nama": "Konsultansi Penyusunan DED Usulan DAK 2027", "jenis": "Konsultansi", "pagu": 90000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Graha Citra selaras", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 32, "no": 32, "nama": "Konsultansi Penyusunan Rencana Umum Jaringan Jalan Kabupaten", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Lantar Cipta Media", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 33, "no": 33, "nama": "Konsultansi Penyusunan UKL UPL Kegiatan 2026", "jenis": "Konsultansi", "pagu": 75000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Lingkungan Hidup", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 34, "no": 34, "nama": "Konsultansi Perhitungan LHR/ESA Jalan Kabupaten", "jenis": "Konsultansi", "pagu": 35000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "PT. Rekadwipa Teknika Studio", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 35, "no": 35, "nama": "Konsultansi Survey Kondisi Jalan Wilayah 1", "jenis": "Konsultansi", "pagu": 75000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Lantar Cipta Media", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-10-17", "waktuPelaksanaan": 50, "tanggalAkhirPelaksanaan": "2026-12-05", "progresKeuangan": 30, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 36, "no": 36, "nama": "Konsultansi Survey Kondisi Jembatan", "jenis": "Konsultansi", "pagu": 75000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "PT. Rekadwipa Teknika Studio", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-10-17", "waktuPelaksanaan": 50, "tanggalAkhirPelaksanaan": "2026-12-05", "progresKeuangan": 30, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 37, "no": 37, "nama": "Pengawasan Kegiatan Bankeu Provinsi Paket 01", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Graha Citra selaras", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 38, "no": 38, "nama": "Pengawasan Kegiatan Bankeu Provinsi Paket 02", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Adhirajasa Consultant", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 39, "no": 39, "nama": "Pelebaran Jalan Gembong - Blorong (Ruas 176)", "jenis": "Konstruksi", "pagu": 5000000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 40, "no": 40, "nama": "Rekonstruksi Jalan Srandon - Puntukrejo (Ruas 88)", "jenis": "Konstruksi", "pagu": 6000000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 41, "no": 41, "nama": "Pembangunan Jembatan Pentuk - Candi, Kec. Mojogedang", "jenis": "Konstruksi", "pagu": 750000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 42, "no": 42, "nama": "Pelebaran Jalan Jumapolo - Jumantono (Ruas 185)", "jenis": "Konstruksi", "pagu": 5337747300, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 43, "no": 43, "nama": "Rehabilitasi Jalan Matesih - Tegalgede (Ruas 141)", "jenis": "Konstruksi", "pagu": 4935000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 44, "no": 44, "nama": "Pelebaran Jalan Gedong - Kebonagung (Ruas 202)", "jenis": "Konstruksi", "pagu": 2660000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 45, "no": 45, "nama": "Pelebaran Jalan Kebak - Punthuk (Ruas 183)", "jenis": "Konstruksi", "pagu": 2040000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 46, "no": 46, "nama": "Pemeliharaan Berkala Jl. Matesih - Tawangmangu (Ruas 126)", "jenis": "Konstruksi", "pagu": 4935000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 47, "no": 47, "nama": "Pemeliharaan Berkala Jl. Mipidan (Ruas 34)", "jenis": "Konstruksi", "pagu": 600000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 48, "no": 48, "nama": "Pemeliharaan Berkala Jl. Baturan Klodran (Ruas 13)", "jenis": "Konstruksi", "pagu": 960000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 49, "no": 49, "nama": "Pembangunan Jalan menuju Kebon 9-11, Gumeng", "jenis": "Konstruksi", "pagu": 1610000000, "penetapanPerubahan": "Penetapan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Masuk PBJ", "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 50, "no": 50, "nama": "Penggantian Jembatan Bulu-bulu, Kec. Jenawi", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Bangun Negara Nusantara", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-10-27", "waktuPelaksanaan": 50, "tanggalAkhirPelaksanaan": "2026-12-15", "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 51, "no": 51, "nama": "Pembangunan Talud Dayu - Sangiran", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Setia Budi", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 52, "no": 52, "nama": "Pembangunan Talud Jalan Gragalan - Blora", "jenis": "Konstruksi", "pagu": 300000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Tunjung Jaya", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 53, "no": 53, "nama": "Pembangunan Talud Jalan Matesih - Girilayu", "jenis": "Konstruksi", "pagu": 250000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Tunjung Jaya", "statusDok": "Belum", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 54, "no": 54, "nama": "Pembangunan Talud Jalan Ngargoyoso - Jenawi", "jenis": "Konstruksi", "pagu": 245000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Karya Muda", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Oktober 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-10-27", "waktuPelaksanaan": 50, "tanggalAkhirPelaksanaan": "2026-12-15", "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 55, "no": 55, "nama": "Pemeliharaan Berkala Jl. Jenawi - Anggrasmanis, Kec. Jenawi (Ruas 110)", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Perisai Bangsa", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Agustus 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-08-24", "waktuPelaksanaan": 90, "tanggalAkhirPelaksanaan": "2026-11-21", "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 56, "no": 56, "nama": "Pemeliharaan Jl. Pendem - Ngargoyoso, Kec. Mojogedang (Ruas 71)", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Penetapan", "metode": "e-PL", "penyedia": "CV. Central Karya", "statusDok": "Sudah", "ded": "Ada", "rab": "Ada", "kak": "Ada", "dokPemilihan": "Ada", "schedulePBJ": "Agustus 2026", "statusKirimPBJ": "Berkontrak", "tanggalKontrak": "2026-08-24", "waktuPelaksanaan": 90, "tanggalAkhirPelaksanaan": "2026-11-21", "progresKeuangan": 30, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 57, "no": 57, "nama": "Rehabilitasi Jalan Kapten Mulyadi (Ruas 221)", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. Asanka Karya", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 58, "no": 58, "nama": "Rekonstruksi Ruas Jalan Lingkar Terminal Palur (Ruas 47)", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "PT. Guna Daya Perkasa", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 59, "no": 59, "nama": "Pengawasan Ruas Jalan Wagal-Wonolopo dan Geneng-Wagal", "jenis": "Konsultansi", "pagu": 50000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. Caraka", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 60, "no": 60, "nama": "Konsultansi Survey Kondisi Jalan Wilayah 2", "jenis": "Konsultansi", "pagu": 75000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "PT. Rekadwipa Teknika Studio", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 61, "no": 61, "nama": "Konsultansi Perenc. Jl. Sambang Dalan - Berjo & Peningkatan Jl. Dusun Sumberjo", "jenis": "Konsultansi", "pagu": 40000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. Graha Citra selaras", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 62, "no": 62, "nama": "Konsultansi Pengawasan Jl. Sambang Dalan - Berjo", "jenis": "Konsultansi", "pagu": 60000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. Bengawan Tjipta Jaya", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 63, "no": 63, "nama": "Rehabilitasi Jalan Kapten Mulyadi (Ruas 221)", "jenis": "Konstruksi", "pagu": 3630000000, "penetapanPerubahan": "Perubahan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 64, "no": 64, "nama": "Rekonstruksi Ruas Jalan Lingkar Terminal Palur (Ruas 47)", "jenis": "Konstruksi", "pagu": 3550000000, "penetapanPerubahan": "Perubahan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 65, "no": 65, "nama": "Rekonstruksi Ruas Jalan Wagal - Wonolopo (Ruas 204)", "jenis": "Konstruksi", "pagu": 630000000, "penetapanPerubahan": "Perubahan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 66, "no": 66, "nama": "Rekonstruksi Geneng - Wagal (Ruas 203)", "jenis": "Konstruksi", "pagu": 830000000, "penetapanPerubahan": "Perubahan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 67, "no": 67, "nama": "Peningkatan Jalan Sambang Dalan - Berjo (Ruas 117)", "jenis": "Konstruksi", "pagu": 3000000000, "penetapanPerubahan": "Perubahan", "metode": "e-Purchasing", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 68, "no": 68, "nama": "Penggantian Jembatan Arum Ndalu, Ruas Ngargoyoso - Kadipekso", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. SMD Group", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 69, "no": 69, "nama": "Peningkatan Jl. RT.11/RW.8 Ds. Papahan", "jenis": "Konstruksi", "pagu": 165000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 70, "no": 70, "nama": "Peningkatan Jl. RT.01/RW.04 Celep Kidul, Dagen, Jaten", "jenis": "Konstruksi", "pagu": 165000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 71, "no": 71, "nama": "Pelebaran Jembatan Malangjiwan, Colomadu", "jenis": "Konstruksi", "pagu": 155000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 72, "no": 72, "nama": "Peningkatan Jl. Watudakon RT.06/RW.06, Bulurejo, Gondangrejo", "jenis": "Konstruksi", "pagu": 50000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 73, "no": 73, "nama": "Pengaspalan Jl. Lingkungan Banaran RT.05/RW.01 Jati, Kec. Jaten", "jenis": "Konstruksi", "pagu": 150000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 74, "no": 74, "nama": "Peningkatan Jalan Yos Sudarso (Ruas 284)", "jenis": "Konstruksi", "pagu": 350000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 75, "no": 75, "nama": "Peningkatan Jalan P. Senopati (Ruas 285)", "jenis": "Konstruksi", "pagu": 215000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 76, "no": 76, "nama": "Pemeliharaan Berkala Jalan Songgorunggi - Dagen", "jenis": "Konstruksi", "pagu": 200000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": "CV. Wachid", "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 77, "no": 77, "nama": "Pemeliharaan Rutin Jalan Trengguli - Lempong", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 78, "no": 78, "nama": "Pemeliharaan Rutin Jalan Tasikmadu - Wonolopo", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 79, "no": 79, "nama": "Pemeliharaan Rutin Jalan Ngargoyoso - Jenawi", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 80, "no": 80, "nama": "Peningkatan Jl. Ngiri - Truneng, Kec. Karangpandan", "jenis": "Konstruksi", "pagu": 135000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 81, "no": 81, "nama": "Peningkatan Jalan Gragalan - Blora (Ruas 84)", "jenis": "Konstruksi", "pagu": 200000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 82, "no": 82, "nama": "Peningkatan Jl. Dusun Sumberjo 2, Desa Pojok, Mojogedang", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 83, "no": 83, "nama": "Pemeliharaan Berkala Jl. Jumapolo - Giriwondo, Jumapolo", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 84, "no": 84, "nama": "Pemeliharaan Berkala Jl. Baturan - Sumber, Colomadu", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "DAU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 85, "no": 85, "nama": "Rekonstruksi Jalan Abdul Rahman Saleh", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 86, "no": 86, "nama": "Rekonstruksi Jalan Gajahmada", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 87, "no": 87, "nama": "Rekonstruksi Jalan Monginsidi", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 88, "no": 88, "nama": "Rekonstruksi Jalan Gemantar - Jumantoro", "jenis": "Konstruksi", "pagu": 400000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": "Belum", "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "November 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": "BANKEU", "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}, {"id": 89, "no": 100, "nama": "Peningkatan SPAM Dompyong Pringapus, Desa Gondangmanis, Kec Karangpandan, Kab. Karanganyar", "jenis": "Konstruksi", "pagu": 100000000, "penetapanPerubahan": "Perubahan", "metode": "e-PL", "penyedia": null, "statusDok": null, "ded": null, "rab": null, "kak": null, "dokPemilihan": null, "schedulePBJ": "Oktober 2026", "statusKirimPBJ": null, "tanggalKontrak": null, "waktuPelaksanaan": null, "tanggalAkhirPelaksanaan": null, "progresKeuangan": null, "sumberDana": null, "tanggalPHO": null, "tanggalFHO": null, "statusSerahTerima": null}];
+
+const STAGES = [
+  {key:0, label:"Persiapan Dokumen",     short:"Persiapan",   color:"#78766e", text:"#fff"},
+  {key:1, label:"Dokumen Lengkap",       short:"Dok. Lengkap",color:"var(--s7)", text:"#fff"},
+  {key:2, label:"Proses Pengadaan",      short:"Pengadaan",   color:"var(--s2)", text:"#fff"},
+  {key:3, label:"Kontrak Ditandatangani",short:"Kontrak",     color:"var(--s5)", text:"#fff"},
+  {key:4, label:"Pelaksanaan Berjalan",  short:"Pelaksanaan", color:"var(--s1)", text:"#fff"},
+  {key:5, label:"Pelaksanaan Selesai",   short:"Selesai Fisik",color:"var(--s3)", text:"#fff"},
+  {key:6, label:"Serah Terima (PHO)",    short:"PHO",         color:"var(--s4)", text:"#0b0b0b"},
+  {key:7, label:"Serah Terima (FHO)",    short:"Selesai",     color:"var(--s6)", text:"#fff"},
+];
+
+const JENIS_COLORS = {
+  'Konstruksi':  {color:"var(--s2)", text:"#fff"},   // oranye
+  'Konsultansi': {color:"var(--s3)", text:"#fff"},   // cyan/aqua
+};
+
+function computeStage(it){
+  if (it.statusSerahTerima === 'FHO' || it.tanggalFHO) return 7;
+  if (it.statusSerahTerima === 'PHO' || it.tanggalPHO) return 6;
+  if (it.progresKeuangan != null && Number(it.progresKeuangan) >= 100) return 5;
+  if (it.statusKirimPBJ === 'Berkontrak' || it.tanggalKontrak){
+    if (it.progresKeuangan != null && Number(it.progresKeuangan) > 0) return 4;
+    return 3;
+  }
+  if (it.statusKirimPBJ === 'Masuk PBJ') return 2;
+  if (it.dokPemilihan === 'Ada') return 2;
+  if (it.ded === 'Ada' && it.rab === 'Ada' && it.kak === 'Ada') return 1;
+  return 0;
+}
+
+const FIELD_DEFS = [
+  {key:'nama', label:'Nama Kegiatan', type:'text', span2:true, section:'Umum'},
+  {key:'jenis', label:'Jenis Pekerjaan', type:'select', options:['Konstruksi','Konsultansi'], section:'Umum'},
+  {key:'penetapanPerubahan', label:'Penetapan/Perubahan', type:'select', options:['Penetapan','Perubahan'], section:'Umum'},
+  {key:'sumberDana', label:'Sumber Dana', type:'select', options:['DAK','DAU','BANKEU'], section:'Umum'},
+  {key:'pagu', label:'Pagu Anggaran (Rp)', type:'number', section:'Umum'},
+  {key:'penyedia', label:'Nama Penyedia', type:'text', section:'Umum'},
+  {key:'ded', label:'DED', type:'select', options:['Ada','Belum'], section:'Persiapan'},
+  {key:'rab', label:'RAB', type:'select', options:['Ada','Belum'], section:'Persiapan'},
+  {key:'kak', label:'KAK', type:'select', options:['Ada','Belum'], section:'Persiapan'},
+  {key:'statusDok', label:'Status Dokumen Pengadaan', type:'select', options:['Sudah','Belum'], section:'Persiapan'},
+  {key:'metode', label:'Metode Pemilihan', type:'select', options:['e-Purchasing','e-PL','Tender','Penunjukan Langsung'], section:'Pengadaan'},
+  {key:'dokPemilihan', label:'Dokumen Pemilihan', type:'select', options:['Ada','Belum'], section:'Pengadaan'},
+  {key:'schedulePBJ', label:'Schedule PBJ', type:'text', section:'Pengadaan'},
+  {key:'statusKirimPBJ', label:'Status Kirim PBJ', type:'select', options:['-','Masuk PBJ','Berkontrak'], section:'Pengadaan'},
+  {key:'tanggalKontrak', label:'Tanggal Kontrak', type:'date', section:'Kontrak & Pelaksanaan'},
+  {key:'waktuPelaksanaan', label:'Waktu Pelaksanaan (hari)', type:'number', section:'Kontrak & Pelaksanaan'},
+  {key:'tanggalAkhirPelaksanaan', label:'Tanggal Akhir Pelaksanaan (otomatis)', type:'date', section:'Kontrak & Pelaksanaan', computed:true},
+  {key:'progresKeuangan', label:'Progres Keuangan (%)', type:'number', section:'Kontrak & Pelaksanaan'},
+  {key:'tanggalPHO', label:'Tanggal PHO', type:'date', section:'Serah Terima'},
+  {key:'tanggalFHO', label:'Tanggal FHO', type:'date', section:'Serah Terima'},
+  {key:'statusSerahTerima', label:'Status Serah Terima', type:'select', options:['PHO','FHO'], section:'Serah Terima'},
+];
+
+const fmtRp = (n) => n==null ? '-' : 'Rp ' + Number(n).toLocaleString('id-ID');
+const fmtRpShort = (n) => {
+  if (n==null) return '-';
+  if (n>=1e9) return 'Rp ' + (n/1e9).toLocaleString('id-ID',{maximumFractionDigits:1}) + ' M';
+  if (n>=1e6) return 'Rp ' + (n/1e6).toLocaleString('id-ID',{maximumFractionDigits:0}) + ' Jt';
+  return fmtRp(n);
+};
+const fmtDate = (s) => {
+  if (!s) return '-';
+  const d = new Date(s+'T00:00:00');
+  if (isNaN(d)) return s;
+  return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+};
+const esc = (s) => (s==null?'':String(s)).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ============================ STATE / STORE ============================ */
+
+let ITEMS = [];
+let useFirebase = false;
+let db = null, fsApi = null;
+const LS_KEY = 'monitoring_kegiatan_bm2026_v2';
+
+async function initStore(){
+  const configured = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.apiKey.length > 0;
+  document.getElementById('setupBanner').style.display = configured ? 'none' : 'flex';
+  document.getElementById('setupGuideText').textContent = SETUP_GUIDE;
+
+  if (configured){
+    try{
+      const [{initializeApp}, firestoreMod] = await Promise.all([
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+      ]);
+      const app = initializeApp(firebaseConfig);
+      db = firestoreMod.getFirestore(app);
+      fsApi = firestoreMod;
+
+      const colRef = fsApi.collection(db, 'kegiatan2026');
+      const snap = await fsApi.getDocs(colRef);
+      if (snap.empty){
+        toast('Mengisi data awal ke Firestore...');
+        const batchSize = 400;
+        for (let i=0; i<SEED_DATA.length; i+=batchSize){
+          const batch = fsApi.writeBatch(db);
+          SEED_DATA.slice(i, i+batchSize).forEach(it=>{
+            batch.set(fsApi.doc(db, 'kegiatan2026', String(it.id)), it);
+          });
+          await batch.commit();
+        }
+        ITEMS = SEED_DATA.map(x=>({...x}));
+      } else {
+        ITEMS = snap.docs.map(d=>d.data()).sort((a,b)=>a.id-b.id);
+      }
+
+      // Baru dianggap benar-benar tersambung setelah baca/tulis di atas sukses tanpa error.
+      useFirebase = true;
+      document.getElementById('modeBadge').textContent = 'Firebase tersambung';
+      document.getElementById('setupBanner').style.display = 'none';
+
+      fsApi.onSnapshot(colRef, (snap2)=>{
+        ITEMS = snap2.docs.map(d=>d.data()).sort((a,b)=>a.id-b.id);
+        renderAll();
+      });
+    } catch(err){
+      console.error('Firebase init gagal, fallback ke mode lokal:', err);
+      useFirebase = false;
+      document.getElementById('modeBadge').textContent = 'Mode lokal (belum tersambung Firebase)';
+      document.getElementById('setupBanner').style.display = 'flex';
+      document.querySelector('#setupBanner b').textContent = 'Firebase gagal tersambung (' + (err.message||err) + ') — memakai mode lokal sementara.';
+      loadLocal();
+    }
+  } else {
+    document.getElementById('modeBadge').textContent = 'Mode lokal (belum tersambung Firebase)';
+    loadLocal();
+  }
+}
+
+function loadLocal(){
+  const raw = localStorage.getItem(LS_KEY);
+  if (raw){
+    try{ ITEMS = JSON.parse(raw); }catch(e){ ITEMS = SEED_DATA.map(x=>({...x})); }
+  } else {
+    ITEMS = SEED_DATA.map(x=>({...x}));
+  }
+  renderAll();
+}
+function saveLocal(){
+  localStorage.setItem(LS_KEY, JSON.stringify(ITEMS));
+}
+
+async function upsertItem(item){
+  if (useFirebase){
+    await fsApi.setDoc(fsApi.doc(db, 'kegiatan2026', String(item.id)), item);
+  } else {
+    const idx = ITEMS.findIndex(x=>x.id===item.id);
+    if (idx>=0) ITEMS[idx] = item; else ITEMS.push(item);
+    saveLocal();
+    renderAll();
+  }
+}
+async function deleteItem(id){
+  if (useFirebase){
+    await fsApi.deleteDoc(fsApi.doc(db, 'kegiatan2026', String(id)));
+  } else {
+    ITEMS = ITEMS.filter(x=>x.id!==id);
+    saveLocal();
+    renderAll();
+  }
+}
+async function bulkUpsert(items){
+  if (useFirebase){
+    const batchSize = 400;
+    for (let i=0; i<items.length; i+=batchSize){
+      const batch = fsApi.writeBatch(db);
+      items.slice(i,i+batchSize).forEach(it=>batch.set(fsApi.doc(db,'kegiatan2026', String(it.id)), it));
+      await batch.commit();
+    }
+  } else {
+    items.forEach(it=>{
+      const idx = ITEMS.findIndex(x=>x.id===it.id);
+      if (idx>=0) ITEMS[idx]=it; else ITEMS.push(it);
+    });
+    saveLocal();
+    renderAll();
+  }
+}
+
+/* ============================ TABS ============================ */
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+  });
+});
+
+/* ============================ DASHBOARD RENDER ============================ */
+
+function uniqBy(arr, fn){
+  const seen = new Set(); const out = [];
+  arr.forEach(x=>{const k=fn(x); if(!seen.has(k)){seen.add(k); out.push(x);}});
+  return out;
+}
+
+function renderDashboard(){
+  const items = getFilteredItems();
+  const uniqNames = new Set(items.map(i=>i.nama)).size;
+  const totalPagu = items.reduce((s,i)=>s+(i.pagu||0),0);
+  const kontruksi = items.filter(i=>i.jenis==='Konstruksi');
+  const avgProgres = (()=>{
+    const withP = kontruksi.filter(i=>i.progresKeuangan!=null);
+    if (!withP.length) return null;
+    return withP.reduce((s,i)=>s+Number(i.progresKeuangan),0)/withP.length;
+  })();
+  const sudahPHO = items.filter(i=>computeStage(i)>=6).length;
+
+  const kpis = [
+    {label:'Kegiatan Unik', value: uniqNames.toLocaleString('id-ID'), foot: items.length.toLocaleString('id-ID')+' total paket pengadaan'},
+    {label:'Total Pagu Anggaran', value: fmtRpShort(totalPagu), foot: fmtRp(totalPagu)},
+    {label:'Progres Fisik Rata-rata', value: avgProgres==null?'-':avgProgres.toFixed(0)+'%', foot: kontruksi.length+' paket konstruksi'},
+    {label:'Sudah Serah Terima (PHO)', value: sudahPHO.toLocaleString('id-ID'), foot: 'dari '+items.length+' paket'},
+  ];
+  document.getElementById('kpiRow').innerHTML = kpis.map(k=>`
+    <div class="kpi">
+      <div class="label">${esc(k.label)}</div>
+      <div class="value">${esc(k.value)}</div>
+      <div class="foot">${k.foot}</div>
+    </div>`).join('');
+
+  // stage chart (ordinal sequential ramp)
+  const stageCounts = STAGES.map(s=>({...s, count: items.filter(i=>computeStage(i)===s.key).length}));
+  const maxCount = Math.max(1, ...stageCounts.map(s=>s.count));
+  document.getElementById('stageChart').innerHTML = stageCounts.map(s=>`
+    <div class="hbar-row">
+      <div class="lbl">${esc(s.label)}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(s.count/maxCount*100).toFixed(1)}%; background:${s.color};" title="${esc(s.label)}: ${s.count} paket"></div></div>
+      <div class="num">${s.count}</div>
+    </div>`).join('');
+
+  // penetapan vs perubahan
+  renderTwoBar('chartPenetapan', items, 'penetapanPerubahan', ['Penetapan','Perubahan'], ['var(--s1)','var(--s2)']);
+  // sumber dana
+  renderTwoBar('chartSumber', items, 'sumberDana', ['DAK','DAU','BANKEU'], ['var(--s1)','var(--s2)','var(--s3)']);
+  // jenis
+  renderTwoBar('chartJenis', items, 'jenis', ['Konstruksi','Konsultansi'], ['var(--s2)','var(--s3)']);
+  // metode pemilihan
+  renderTwoBar('chartMetode', items, 'metode', ['e-PL','e-Purchasing'], ['var(--s1)','var(--s4)']);
+}
+
+function renderTwoBar(containerId, items, field, categories, colors){
+  const counted = categories.map((cat,idx)=>{
+    const subset = items.filter(i=>i[field]===cat);
+    return {cat, color:colors[idx], count: subset.length, pagu: subset.reduce((s,i)=>s+(i.pagu||0),0)};
+  });
+  const unknownCount = items.length - counted.reduce((s,c)=>s+c.count,0);
+  if (unknownCount>0) counted.push({cat:'Belum ditentukan', color:'var(--baseline)', count:unknownCount, pagu: items.filter(i=>!categories.includes(i[field])).reduce((s,i)=>s+(i.pagu||0),0)});
+  const maxCount = Math.max(1, ...counted.map(c=>c.count));
+  const el = document.getElementById(containerId);
+  el.innerHTML = counted.map(c=>`
+    <div class="hbar-row">
+      <div class="lbl">${esc(c.cat)}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(c.count/maxCount*100).toFixed(1)}%; background:${c.color};" title="${c.count} paket &middot; ${fmtRp(c.pagu)}"></div></div>
+      <div class="num">${c.count}</div>
+    </div>`).join('') + `<div class="legend-row">` + counted.map(c=>`<span><span class="sw" style="background:${c.color}"></span>${esc(c.cat)}: ${fmtRpShort(c.pagu)}</span>`).join('') + `</div>`;
+}
+
+/* ============================ DAFTAR KEGIATAN RENDER ============================ */
+
+function populateFilterOptions(){
+  const opt = (sel, vals, placeholder)=>{
+    sel.innerHTML = `<option value="">${placeholder}</option>` + vals.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  };
+  opt(document.getElementById('fPenetapan'), ['Penetapan','Perubahan'], 'Semua Penetapan/Perubahan');
+  opt(document.getElementById('fJenis'), ['Konstruksi','Konsultansi'], 'Semua Jenis');
+  opt(document.getElementById('fSumber'), ['DAK','DAU','BANKEU'], 'Semua Sumber Dana');
+  opt(document.getElementById('fMetode'), ['e-PL','e-Purchasing'], 'Semua Metode');
+  document.getElementById('fStage').innerHTML = '<option value="">Semua Tahapan</option>' + STAGES.map(s=>`<option value="${s.key}">${esc(s.label)}</option>`).join('');
+}
+
+function getFilteredItems(){
+  const q = document.getElementById('fSearch').value.trim().toLowerCase();
+  const fp = document.getElementById('fPenetapan').value;
+  const fj = document.getElementById('fJenis').value;
+  const fs = document.getElementById('fSumber').value;
+  const fm = document.getElementById('fMetode').value;
+  const fst = document.getElementById('fStage').value;
+  return ITEMS.filter(i=>{
+    if (q && !( (i.nama||'').toLowerCase().includes(q) || (i.penyedia||'').toLowerCase().includes(q) )) return false;
+    if (fp && i.penetapanPerubahan!==fp) return false;
+    if (fj && i.jenis!==fj) return false;
+    if (fs && i.sumberDana!==fs) return false;
+    if (fm && i.metode!==fm) return false;
+    if (fst!=='' && computeStage(i)!==Number(fst)) return false;
+    return true;
+  }).sort((a,b)=> (a.no??a.id) - (b.no??b.id));
+}
+
+function activeFilterParts(){
+  const parts = [];
+  const q = document.getElementById('fSearch').value.trim();
+  if (q) parts.push('cari "'+q+'"');
+  const fp = document.getElementById('fPenetapan').value; if (fp) parts.push(fp);
+  const fj = document.getElementById('fJenis').value; if (fj) parts.push(fj);
+  const fs = document.getElementById('fSumber').value; if (fs) parts.push(fs);
+  const fm = document.getElementById('fMetode').value; if (fm) parts.push(fm);
+  const fst = document.getElementById('fStage').value; if (fst!=='') parts.push(STAGES[Number(fst)].label);
+  return parts;
+}
+
+function updateFilterIndicator(count){
+  const parts = activeFilterParts();
+  const reset = document.getElementById('btnResetFilter');
+  const note = document.getElementById('dashFilterNote');
+  document.getElementById('rowCount').textContent = count + ' dari ' + ITEMS.length + ' paket';
+  if (parts.length){
+    reset.style.display = 'inline-flex';
+    note.textContent = 'Ringkasan di bawah difilter: ' + parts.join(' · ') + ' (' + count + ' paket).';
+  } else {
+    reset.style.display = 'none';
+    note.textContent = '';
+  }
+}
+
+document.getElementById('btnResetFilter').addEventListener('click', ()=>{
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fPenetapan').value = '';
+  document.getElementById('fJenis').value = '';
+  document.getElementById('fSumber').value = '';
+  document.getElementById('fMetode').value = '';
+  document.getElementById('fStage').value = '';
+  renderAll();
+});
+
+function renderDaftar(){
+  const rows = getFilteredItems();
+  updateFilterIndicator(rows.length);
+  document.getElementById('tblBody').innerHTML = rows.map(i=>{
+    const st = STAGES[computeStage(i)];
+    const jb = JENIS_COLORS[i.jenis] || {color:'#c3c2b7', text:'#0b0b0b'};
+    return `<tr data-id="${i.id}">
+      <td class="nowrap">${i.no??''}</td>
+      <td class="namecell"><div class="n">${esc(i.nama)}</div><div class="p">${esc(i.penyedia||'')}</div></td>
+      <td class="nowrap">${i.jenis ? `<span class="stagebadge" style="background:${jb.color}; color:${jb.text};">${esc(i.jenis)}</span>` : '-'}</td>
+      <td class="nowrap">${esc(i.penetapanPerubahan||'-')}</td>
+      <td class="nowrap">${esc(i.sumberDana||'-')}</td>
+      <td class="right nowrap">${fmtRpShort(i.pagu)}</td>
+      <td class="nowrap"><span class="stagebadge" style="background:${st.color}; color:${st.text};">${esc(st.short)}</span></td>
+      <td class="nowrap">${esc(i.metode||'-')}</td>
+      <td class="nowrap"><button class="ghost btnOpen" data-id="${i.id}">Detail</button></td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('.btnOpen').forEach(b=>b.addEventListener('click', ()=>openModal(Number(b.dataset.id))));
+}
+
+['fSearch','fPenetapan','fJenis','fSumber','fMetode','fStage'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderAll);
+  document.getElementById(id).addEventListener('change', renderAll);
+});
+
+/* ============================ MODAL EDIT ============================ */
+
+let currentEditId = null;
+
+function fieldInputHtml(def, value){
+  const id = 'f_'+def.key;
+  if (def.type==='select'){
+    const opts = ['<option value="">-</option>'].concat(def.options.map(o=>`<option value="${esc(o)}" ${value===o?'selected':''}>${esc(o)}</option>`));
+    return `<select id="${id}" data-key="${def.key}">${opts.join('')}</select>`;
+  }
+  const v = value==null ? '' : value;
+  const ro = def.computed ? ' readonly title="Dihitung otomatis: Tanggal Kontrak + Waktu Pelaksanaan − 1 hari" style="background:var(--surface-2); color:var(--text-secondary);"' : '';
+  return `<input id="${id}" data-key="${def.key}" type="${def.type}" value="${esc(v)}"${ro}>`;
+}
+
+function buildForm(item){
+  let lastSection = null;
+  const html = FIELD_DEFS.map(def=>{
+    let sectionHtml = '';
+    if (def.section !== lastSection){
+      sectionHtml = `<div class="section-label">${esc(def.section)}</div>`;
+      lastSection = def.section;
+    }
+    return sectionHtml + `<div class="field ${def.span2?'span2':''}"><label>${esc(def.label)}</label>${fieldInputHtml(def, item[def.key])}</div>`;
+  }).join('');
+  document.getElementById('editForm').innerHTML = html;
+}
+
+function computeEndDate(kontrakVal, waktuVal){
+  if (!kontrakVal || !waktuVal) return '';
+  const days = Number(waktuVal);
+  if (!isFinite(days) || days<=0) return '';
+  const d = new Date(kontrakVal+'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  d.setDate(d.getDate() + (days-1));
+  const pad = n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+
+function wireAutoCalcDates(){
+  const kontrakEl = document.getElementById('f_tanggalKontrak');
+  const waktuEl = document.getElementById('f_waktuPelaksanaan');
+  const akhirEl = document.getElementById('f_tanggalAkhirPelaksanaan');
+  if (!kontrakEl || !waktuEl || !akhirEl) return;
+  const recalc = ()=>{ akhirEl.value = computeEndDate(kontrakEl.value, waktuEl.value); };
+  kontrakEl.addEventListener('input', recalc);
+  waktuEl.addEventListener('input', recalc);
+  recalc();
+}
+
+function openModal(id){
+  const isNew = id==null;
+  const item = isNew ? {id: Math.max(0,...ITEMS.map(i=>i.id))+1, no: Math.max(0,...ITEMS.map(i=>i.no||0))+1} : ITEMS.find(i=>i.id===id);
+  if (!item) return;
+  currentEditId = item.id;
+  document.getElementById('modalTitle').textContent = isNew ? 'Kegiatan Baru' : 'Detail / Edit Kegiatan';
+  document.getElementById('modalSub').textContent = isNew ? '' : ('No. '+(item.no??'-')+' &middot; ID '+item.id).replace('&middot;','·');
+  document.getElementById('btnDelete').style.display = isNew ? 'none' : 'inline-flex';
+  buildForm(item);
+  wireAutoCalcDates();
+  document.getElementById('modalBackdrop').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modalBackdrop').classList.remove('show');
+  currentEditId = null;
+}
+document.getElementById('btnCloseModal').addEventListener('click', closeModal);
+document.getElementById('btnCancelModal').addEventListener('click', closeModal);
+document.getElementById('modalBackdrop').addEventListener('click', (e)=>{ if (e.target.id==='modalBackdrop') closeModal(); });
+document.getElementById('btnAdd').addEventListener('click', ()=>openModal(null));
+
+document.getElementById('btnSaveModal').addEventListener('click', async ()=>{
+  const existing = ITEMS.find(i=>i.id===currentEditId) || {id: currentEditId, no: Math.max(0,...ITEMS.map(i=>i.no||0))+1};
+  const item = {...existing};
+  FIELD_DEFS.forEach(def=>{
+    const el = document.getElementById('f_'+def.key);
+    if (!el) return;
+    let val = el.value;
+    if (val === '') val = null;
+    else if (def.type==='number') val = Number(val);
+    item[def.key] = val;
+  });
+  if (!item.nama){ toast('Nama kegiatan wajib diisi'); return; }
+  await upsertItem(item);
+  toast('Tersimpan');
+  closeModal();
+});
+document.getElementById('btnDelete').addEventListener('click', async ()=>{
+  if (!currentEditId) return;
+  if (!confirm('Hapus kegiatan ini? Tindakan tidak bisa dibatalkan.')) return;
+  await deleteItem(currentEditId);
+  toast('Kegiatan dihapus');
+  closeModal();
+});
+
+/* ============================ EXCEL EXPORT / IMPORT ============================ */
+
+const EXCEL_HEADERS = [
+  ['No','no'], ['Nama Kegiatan','nama'], ['Jenis Pekerjaan','jenis'], ['Pagu Anggaran','pagu'],
+  ['Penetapan/Perubahan','penetapanPerubahan'], ['Metode Pemilihan','metode'], ['Nama Penyedia','penyedia'],
+  ['Status Dokumen Pengadaan','statusDok'], ['DED','ded'], ['RAB','rab'], ['KAK','kak'],
+  ['Dokumen Pemilihan','dokPemilihan'], ['Schedule PBJ','schedulePBJ'], ['Status Kirim PBJ','statusKirimPBJ'],
+  ['Tanggal Kontrak','tanggalKontrak'], ['Waktu Pelaksanaan','waktuPelaksanaan'], ['Tanggal Akhir Pelaksanaan','tanggalAkhirPelaksanaan'],
+  ['Progres Keuangan (%)','progresKeuangan'], ['Sumber Dana','sumberDana'],
+  ['Tanggal PHO','tanggalPHO'], ['Tanggal FHO','tanggalFHO'], ['Status Serah Terima','statusSerahTerima'],
+];
+
+document.getElementById('btnExport').addEventListener('click', async ()=>{
+  try{
+  const XLSX = await loadSheetJS();
+  const header = EXCEL_HEADERS.map(h=>h[0]);
+  const rows = ITEMS.slice().sort((a,b)=>(a.no??a.id)-(b.no??b.id)).map(it=>EXCEL_HEADERS.map(([,key])=>it[key]==null?'':it[key]));
+  const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+  ws['!cols'] = header.map(()=>({wch:18}));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Kegiatan BM 2026');
+  XLSX.writeFile(wb, 'monitoring-kegiatan-binamarga-2026.xlsx');
+  toast('Excel terunduh');
+} catch(err){
+  console.error('Gagal membuat Excel:', err);
+  toast('Gagal memuat pustaka Excel (cek koneksi internet ke cdnjs.cloudflare.com)');
+}
+});
+
+document.getElementById('btnImportTrigger').addEventListener('click', ()=>document.getElementById('fileImport').click());
+document.getElementById('fileImport').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if (!file) return;
+  try{
+  const XLSX = await loadSheetJS();
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, {type:'array', cellDates:false});
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
+  const headerRow = data[0].map(h=>String(h||'').trim());
+  const keyForHeader = {};
+  EXCEL_HEADERS.forEach(([label,key])=>{ keyForHeader[label.toLowerCase()] = key; });
+  const colIndexToKey = headerRow.map(h=>keyForHeader[h.toLowerCase()] || null);
+
+  const existingByNo = {}; ITEMS.forEach(i=>existingByNo[i.no]=i);
+  let nextId = Math.max(0,...ITEMS.map(i=>i.id)) + 1;
+  const updated = [];
+  for (let r=1; r<data.length; r++){
+    const row = data[r];
+    if (!row || row.every(c=>c==null||c==='')) continue;
+    const obj = {};
+    colIndexToKey.forEach((key, c)=>{ if (key) obj[key] = row[c]; });
+    if (!obj.nama) continue;
+    const match = obj.no!=null ? existingByNo[Number(obj.no)] : null;
+    const base = match ? {...match} : {id: nextId++, no: obj.no ?? nextId};
+    Object.keys(obj).forEach(k=>{
+      let v = obj[k];
+      if (v === '' ) v = null;
+      if (['pagu','waktuPelaksanaan','progresKeuangan','no'].includes(k) && v!=null) v = Number(String(v).replace(/[^0-9.\-]/g,''));
+      base[k] = v;
+    });
+    updated.push(base);
+  }
+  if (!updated.length){ toast('Tidak ada baris valid yang terbaca dari file'); e.target.value=''; return; }
+  await bulkUpsert(updated);
+  toast('Impor selesai: ' + updated.length + ' baris diperbarui/ditambahkan');
+  } catch(err){
+    console.error('Gagal mengimpor Excel:', err);
+    toast('Gagal memuat/membaca file Excel (cek koneksi internet atau format file)');
+  } finally {
+    e.target.value = '';
+  }
+});
+
+let _sheetjsPromise = null;
+function loadSheetJS(){
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (_sheetjsPromise) return _sheetjsPromise;
+  _sheetjsPromise = new Promise((resolve,reject)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload = ()=>resolve(window.XLSX);
+    s.onerror = ()=>{ _sheetjsPromise = null; reject(new Error('gagal memuat script SheetJS dari CDN')); };
+    document.head.appendChild(s);
+  });
+  return _sheetjsPromise;
+}
+
+/* ============================ SETUP GUIDE TEXT ============================ */
+const SETUP_GUIDE = `1. Buka https://console.firebase.google.com -> Add project -> beri nama (misal "monitoring-bm-2026").
+2. Di menu kiri pilih "Build > Firestore Database" -> Create database -> pilih lokasi (asia-southeast) -> mode "Production".
+3. Buka "Project settings" (ikon gerigi) -> scroll ke "Your apps" -> klik ikon web "</>" -> daftarkan app -> salin object firebaseConfig yang muncul.
+4. Tempel nilai apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId ke bagian atas file HTML ini (cari "firebaseConfig").
+5. Di tab "Firestore Database > Rules", untuk akses tanpa PIN di jaringan internal, bisa dipakai sementara:
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /kegiatan2026/{doc} {
+         allow read, write: if true;
+       }
+     }
+   }
+   (Rules ini terbuka untuk siapa saja yang tahu URL Firestore -- cukup untuk pemakaian internal via link yang tidak disebar. Kalau perlu lebih aman, beri tahu saya supaya ditambahkan PIN/App Check.)
+6. Simpan file, buka ulang di browser -- data 122 paket awal akan otomatis terisi ke Firestore sekali saja.
+7. Upload file HTML ini ke GitHub Pages / hosting seperti aplikasi Bapak yang lain.`;
+
+/* ============================ INIT ============================ */
+
+function renderAll(){
+  renderDashboard();
+  renderDaftar();
+}
+
+populateFilterOptions();
+initStore();
+</script>
+</body>
+</html>
