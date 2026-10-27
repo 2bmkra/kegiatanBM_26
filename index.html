@@ -312,7 +312,7 @@ const STAGES = [
   {key:2, label:"Proses Pengadaan",      short:"Pengadaan",   color:"var(--s2)", text:"#fff"},
   {key:3, label:"Kontrak Ditandatangani",short:"Kontrak",     color:"var(--s5)", text:"#fff"},
   {key:4, label:"Pelaksanaan Berjalan",  short:"Pelaksanaan", color:"var(--s1)", text:"#fff"},
-  {key:5, label:"Pelaksanaan Selesai",   short:"Selesai Fisik",color:"var(--s3)", text:"#fff"},
+  {key:5, label:"Pelaksanaan Selesai",   short:"Selesai ",color:"var(--s3)", text:"#fff"},
   {key:6, label:"Serah Terima (PHO)",    short:"PHO",         color:"var(--s4)", text:"#0b0b0b"},
   {key:7, label:"Serah Terima (FHO)",    short:"Selesai",     color:"var(--s6)", text:"#fff"},
 ];
@@ -528,7 +528,7 @@ function renderDashboard(){
   const kpis = [
     {label:'Kegiatan Unik', value: uniqNames.toLocaleString('id-ID'), foot: items.length.toLocaleString('id-ID')+' total paket pengadaan'},
     {label:'Total Pagu Anggaran', value: fmtRpShort(totalPagu), foot: fmtRp(totalPagu)},
-    {label:'Progres Fisik Rata-rata', value: avgProgres==null?'-':avgProgres.toFixed(0)+'%', foot: kontruksi.length+' paket konstruksi'},
+    {label:'Progres Keuangan Rata-rata', value: avgProgres==null?'-':avgProgres.toFixed(0)+'%', foot: kontruksi.length+' paket konstruksi'},
     {label:'Sudah Serah Terima (PHO)', value: sudahPHO.toLocaleString('id-ID'), foot: 'dari '+items.length+' paket'},
   ];
   document.getElementById('kpiRow').innerHTML = kpis.map(k=>`
